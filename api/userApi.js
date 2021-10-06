@@ -33,7 +33,7 @@ router.route('/signup').post((req, res) => {
                     name,
                     email,
                     password: hashedPassword
-                });
+                })
                
                 newUser.save()
                 .then(user=>res.json(user))
