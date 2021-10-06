@@ -38,9 +38,25 @@ router.route('/signup').post((req, res) => {
                 newUser.save()
                 .then(user=>res.json(user))
                 .catch(err=>res.status(400).json("Error!" + err))
+            }).catch(err=>{
+                console.log(err);
+                res.json(
+                    {
+                        status: 'FAILED',
+                        message: 'An error occurred while setting password'
+                    }
+                )
             })
            
         }
+    }).catch(err => {
+        console.log(err);
+        res.json(
+            {
+                status: 'FAILED',
+                message: 'An error occurred'
+            }
+        )
     })
     }
 });
@@ -83,8 +99,24 @@ router.route('/login').post((req, res)=> {
                             }
                         )
                     }
+                }).catch(err => {
+                    console.log(err);
+                    res.json(
+                        {
+                            status: 'FAILED',
+                            message: 'An error occurred'
+                        }
+                    )
                 })
             }
+        }).catch(err => {
+            console.log(err);
+            res.json(
+                {
+                    status: 'FAILED',
+                    message: 'An error occurred'
+                }
+            )
         })
     }
 })
