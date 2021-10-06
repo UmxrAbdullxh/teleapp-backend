@@ -16,48 +16,50 @@ router.route('/signup').post((req, res) => {
             }
         )
     }
-   else{
-    User.find({email}).then(result => {
-        if(result.length){
-            res.json(
-                {
-                    status: 'FAILED',
-                    message: 'User with this email already exists'
-                }
-            )
-        }
-        else{
-            const saltRounds = 10;
-            bcrypt.hash(password, saltRounds).then(hashedPassword => {
-                const newUser = new User({
-                    name,
-                    email,
-                    password: hashedPassword
-                })
+    else{
+        User.find({email}).then(result => {
+            if(result.length){
+                res.json(
+                    {
+                        status: 'FAILED',
+                        message: 'User with this email already exists'
+                    }
+                )
+            }
+            else{
+                const saltRounds = 10;
+                bcrypt.hash(password, saltRounds).then(hashedPassword => {
+                    const newUser = new User({
+                        name,
+                        email,
+                        password: hashedPassword
+                    })
                
-                newUser.save()
-                .then(user=>res.json(user))
-                .catch(err=>res.status(400).json("Error!" + err))
-            }).catch(err=>{
+                    newUser.save()
+                    .then(user=>res.json(user))
+                    .catch(err=>res.status(400).json("Error!" + err))
+                }).catch(err=>{
+                    console.log(err);
+                    res.json(
+                        {
+                            status: 'FAILED',
+                            message: 'An error occurred while setting password'
+                        }
+                    )
+                })
+           
+            }
+        })
+        .catch(err => 
+            {
                 console.log(err);
                 res.json(
                     {
                         status: 'FAILED',
-                        message: 'An error occurred while setting password'
+                        message: 'An error occurred'
                     }
-                )
+                )   
             })
-           
-        }
-    }).catch(err => {
-        console.log(err);
-        res.json(
-            {
-                status: 'FAILED',
-                message: 'An error occurred'
-            }
-        )
-    })
     }
 });
 
